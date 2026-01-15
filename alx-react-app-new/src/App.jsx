@@ -1,11 +1,11 @@
 import UserProfile from './components/UserProfile';
-
 import Header from './components/Header';
 import MainContent from './components/MainContent';
 import Footer from './components/Footer';
-
 import './App.css'
 import WelcomeMessage from './components/WelcomeMessage';
+import Counter from './components/Counter';
+
 
 
 
@@ -22,6 +22,7 @@ function App() {
       <MainContent />
       <Footer />
       <WelcomeMessage />
+      <Counter />
     </div>
   );
 }
