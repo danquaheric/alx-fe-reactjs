@@ -1,25 +1,39 @@
 import { useState } from 'react';
-import useRecipeStore from './recipeStore';
+import { useRecipeStore } from './recipeStore';
 
-const EditRecipeForm = ({ recipe }) => {
-  const updateRecipe = useRecipeStore((state) => state.updateRecipe);
+const EditRecipeForm = ({ recipe, onClose }) => {
+  const updateRecipe = useRecipeStore(state => state.updateRecipe);
+
   const [title, setTitle] = useState(recipe.title);
   const [description, setDescription] = useState(recipe.description);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    updateRecipe({ ...recipe, title, description });
+  const handleSubmit = (event) => {
+    // <-- This is the missing part
+    event.preventDefault();
+
+    updateRecipe({
+      id: recipe.id,
+      title,
+      description
+    });
+
+    if (onClose) onClose(); // optional: close the edit form after submission
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <input
+        type="text"
         value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        onChange={e => setTitle(e.target.value)}
+        placeholder="Title"
+        required
       />
       <textarea
         value={description}
-        onChange={(e) => setDescription(e.target.value)}
+        onChange={e => setDescription(e.target.value)}
+        placeholder="Description"
+        required
       />
       <button type="submit">Update Recipe</button>
     </form>
