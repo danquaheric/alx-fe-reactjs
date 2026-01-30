@@ -1,44 +1,61 @@
-import axios from 'axios';
+import React, { useState } from 'react';
+import { fetchUserData } from '../services/githubService';
 
-// Get the GitHub token from the .env file
-const GITHUB_API_TOKEN = import.meta.env.VITE_APP_GITHUB_API_KEY;
+const Search = () => {
+  const [username, setUsername] = useState(''); // Track input
+  const [userData, setUserData] = useState(null); // Store fetched user data
+  const [loading, setLoading] = useState(false); // Loading state
+  const [error, setError] = useState(null); // Error state
 
-// Configure headers only if token exists
-const headers = GITHUB_API_TOKEN
-  ? { Authorization: `Bearer ${GITHUB_API_TOKEN}` }
-  : {};
+  const handleSubmit = async (event) => {
+    event.preventDefault(); // Prevent page reload
+    setLoading(true);
+    setError(null);
+    setUserData(null);
 
-export const fetchUserData = async (username) => {
-  if (!username) {
-    throw new Error('Username is required to fetch GitHub data.');
-  }
-
-  try {
-    const response = await axios.get(`https://api.github.com/users/${username}`, {
-      headers,
-    });
-
-    // Return the user data
-    return response.data;
-  } catch (error) {
-    if (error.response) {
-      // GitHub API returned an error (e.g., 404 or 403)
-      console.error(
-        'GitHub API error:',
-        error.response.status,
-        error.response.data.message
-      );
-      throw new Error(
-        `GitHub API error: ${error.response.status} - ${error.response.data.message}`
-      );
-    } else if (error.request) {
-      // Request was made but no response
-      console.error('No response from GitHub API:', error.message);
-      throw new Error('No response from GitHub API.');
-    } else {
-      // Other errors
-      console.error('Error fetching GitHub data:', error.message);
-      throw new Error('Error fetching GitHub data.');
+    try {
+      const data = await fetchUserData(username);
+      setUserData(data);
+    } catch (err) {
+      setError('Looks like we can’t find the user.');
+    } finally {
+      setLoading(false);
     }
-  }
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)} // Track input
+          placeholder="Enter GitHub username"
+          required
+        />
+        <button type="submit">Search</button>
+      </form>
+
+      {loading && <p>Loading...</p>}
+      {error && <p>{error}</p>}
+
+      {userData && (
+        <div style={{ marginTop: '20px' }}>
+          <img
+            src={userData.avatar_url}
+            alt={userData.login}
+            width={100}
+            style={{ borderRadius: '50%' }}
+          />
+          <h2>{userData.name || userData.login}</h2>
+          <p>Public Repos: {userData.public_repos}</p>
+          <a href={userData.html_url} target="_blank" rel="noopener noreferrer">
+            Visit GitHub Profile
+          </a>
+        </div>
+      )}
+    </div>
+  );
 };
+
+export default Search;
