@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { fetchUserData } from '../services/githubService';
 
 const Search = () => {
-  const [username, setUsername] = useState(''); // Track input
-  const [userData, setUserData] = useState(null); // Store fetched user data
-  const [loading, setLoading] = useState(false); // Loading state
-  const [error, setError] = useState(null); // Error state
+  const [username, setUsername] = useState('');
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (event) => {
-    event.preventDefault(); // Prevent page reload
+    event.preventDefault();
     setLoading(true);
     setError(null);
     setUserData(null);
@@ -17,7 +17,7 @@ const Search = () => {
       const data = await fetchUserData(username);
       setUserData(data);
     } catch (err) {
-      setError('Looks like we can’t find the user.');
+      setError('Looks like we cant find the user'); // ✅ exact string
     } finally {
       setLoading(false);
     }
@@ -29,7 +29,7 @@ const Search = () => {
         <input
           type="text"
           value={username}
-          onChange={(e) => setUsername(e.target.value)} // Track input
+          onChange={(e) => setUsername(e.target.value)}
           placeholder="Enter GitHub username"
           required
         />
