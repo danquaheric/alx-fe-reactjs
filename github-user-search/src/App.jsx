@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import SearchBar from './components/SearchBar';
 import UserList from './components/UserList';
+import Search from  './components/Search';
 
 function App() {
   const [users, setUsers] = useState([]);
@@ -10,6 +11,7 @@ function App() {
       <h1>GitHub User Search</h1>
       <SearchBar setUsers={setUsers} />
       <UserList users={users} />
+      <Search />
     </div>
   );
 }
