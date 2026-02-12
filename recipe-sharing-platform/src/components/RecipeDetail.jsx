@@ -1,9 +1,18 @@
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import recipesData from "../data.json";
 
 const RecipeDetail = () => {
   const { id } = useParams();
-  const recipe = recipesData.find((r) => r.id === parseInt(id));
+  const [recipe, setRecipe] = useState(null);
+
+  useEffect(() => {
+    const foundRecipe = recipesData.find(
+      (r) => r.id === parseInt(id)
+    );
+
+    setRecipe(foundRecipe);
+  }, [id]);
 
   if (!recipe) {
     return (
@@ -17,7 +26,6 @@ const RecipeDetail = () => {
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
 
-        {/* Back Button */}
         <Link
           to="/"
           className="text-blue-500 hover:underline mb-4 inline-block"
@@ -25,19 +33,16 @@ const RecipeDetail = () => {
           ← Back to Home
         </Link>
 
-        {/* Image */}
         <img
           src={recipe.image}
           alt={recipe.title}
           className="w-full h-64 object-cover rounded-lg mb-6"
         />
 
-        {/* Title */}
         <h1 className="text-3xl font-bold mb-4 text-gray-800">
           {recipe.title}
         </h1>
 
-        {/* Ingredients Section */}
         <div className="mb-6">
           <h2 className="text-xl font-semibold mb-2 text-gray-700">
             Ingredients
@@ -49,7 +54,6 @@ const RecipeDetail = () => {
           </ul>
         </div>
 
-        {/* Instructions Section */}
         <div>
           <h2 className="text-xl font-semibold mb-2 text-gray-700">
             Instructions
