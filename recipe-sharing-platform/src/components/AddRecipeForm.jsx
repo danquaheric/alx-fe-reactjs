@@ -19,7 +19,8 @@ const AddRecipeForm = () => {
     if (!ingredients.trim()) {
       newErrors.ingredients = "Ingredients are required.";
     } else if (ingredients.split(",").length < 2) {
-      newErrors.ingredients = "Please include at least two ingredients separated by commas.";
+      newErrors.ingredients =
+        "Please include at least two ingredients separated by commas.";
     }
 
     if (!steps.trim()) {
@@ -27,7 +28,6 @@ const AddRecipeForm = () => {
     }
 
     setErrors(newErrors);
-
     return Object.keys(newErrors).length === 0;
   };
 
@@ -44,21 +44,19 @@ const AddRecipeForm = () => {
 
       console.log("New Recipe Submitted:", newRecipe);
 
-      // Reset form
       setTitle("");
       setIngredients("");
       setSteps("");
 
-      // Redirect to Home
       navigate("/");
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6 flex items-center justify-center">
-      <div className="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6">
+    <div className="min-h-screen bg-gray-100 p-4 md:p-8 flex items-center justify-center">
+      <div className="w-full max-w-md md:max-w-2xl bg-white shadow-lg rounded-lg p-4 md:p-8">
 
-        <h1 className="text-2xl font-bold mb-6 text-gray-800 text-center">
+        <h1 className="text-xl md:text-2xl font-bold mb-6 text-gray-800 text-center">
           Add New Recipe
         </h1>
 
@@ -71,7 +69,7 @@ const AddRecipeForm = () => {
             </label>
             <input
               type="text"
-              className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full border rounded-lg p-2 md:p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
@@ -86,7 +84,7 @@ const AddRecipeForm = () => {
               Ingredients (separate with commas)
             </label>
             <textarea
-              className="w-full border rounded-lg p-2 h-24 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full border rounded-lg p-2 md:p-3 h-24 focus:outline-none focus:ring-2 focus:ring-blue-400"
               value={ingredients}
               onChange={(e) => setIngredients(e.target.value)}
             />
@@ -101,7 +99,7 @@ const AddRecipeForm = () => {
               Preparation Steps (one per line)
             </label>
             <textarea
-              className="w-full border rounded-lg p-2 h-32 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full border rounded-lg p-2 md:p-3 h-32 focus:outline-none focus:ring-2 focus:ring-blue-400"
               value={steps}
               onChange={(e) => setSteps(e.target.value)}
             />
@@ -113,7 +111,7 @@ const AddRecipeForm = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white font-semibold py-2 rounded-lg hover:bg-blue-600 transition duration-300"
+            className="w-full bg-blue-500 text-white font-semibold py-2 md:py-3 rounded-lg hover:bg-blue-600 transition duration-300"
           >
             Submit Recipe
           </button>
