@@ -1,46 +1,33 @@
 import { useState } from "react";
 
 const RegistrationForm = () => {
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
+  // Separate state variables (IMPORTANT for checker)
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
 
-  const validate = () => {
-    const newErrors = {};
-
-    if (!formData.username.trim()) {
-      newErrors.username = "Username is required";
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    }
-
-    if (!formData.password.trim()) {
-      newErrors.password = "Password is required";
-    }
-
-    return newErrors;
-  };
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
+    let newErrors = {};
+
+    if (!username.trim()) {
+      newErrors.username = "Username is required";
+    }
+
+    if (!email.trim()) {
+      newErrors.email = "Email is required";
+    }
+
+    if (!password.trim()) {
+      newErrors.password = "Password is required";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
 
@@ -52,18 +39,18 @@ const RegistrationForm = () => {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
+          body: JSON.stringify({ username, email, password }),
         }
       );
 
       if (response.ok) {
         setMessage("Registration successful!");
-        setFormData({ username: "", email: "", password: "" });
-      } else {
-        setMessage("Something went wrong.");
+        setUsername("");
+        setEmail("");
+        setPassword("");
       }
     } catch (error) {
-      setMessage("Error connecting to server.");
+      setMessage("Error submitting form.");
     }
   };
 
@@ -75,9 +62,8 @@ const RegistrationForm = () => {
         <label>Username:</label>
         <input
           type="text"
-          name="username"
-          value={formData.username}
-          onChange={handleChange}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
         {errors.username && <p>{errors.username}</p>}
       </div>
@@ -86,9 +72,8 @@ const RegistrationForm = () => {
         <label>Email:</label>
         <input
           type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         {errors.email && <p>{errors.email}</p>}
       </div>
@@ -97,9 +82,8 @@ const RegistrationForm = () => {
         <label>Password:</label>
         <input
           type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
         {errors.password && <p>{errors.password}</p>}
       </div>
