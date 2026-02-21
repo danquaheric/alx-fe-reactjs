@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import PostsComponent from './PostsComponent';
+import PostsComponent from './components/PostsComponent';
 
 const queryClient = new QueryClient();
 
