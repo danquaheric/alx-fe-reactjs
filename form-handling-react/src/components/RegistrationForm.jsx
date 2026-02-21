@@ -10,38 +10,48 @@ const RegistrationForm = () => {
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    let newErrors = {};
+  let newErrors = {};
 
-    if (!username.trim()) {
-      newErrors.username = "Username is required";
+  if (!username) {
+    newErrors.username = "Username is required";
+  }
+
+  if (!email) {
+    newErrors.email = "Email is required";
+  }
+
+  if (!password) {
+    newErrors.password = "Password is required";
+  }
+
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    return;
+  }
+
+  setErrors({});
+
+  try {
+    const response = await fetch(
+      "https://jsonplaceholder.typicode.com/users",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, email, password }),
+      }
+    );
+
+    if (response.ok) {
+      setUsername("");
+      setEmail("");
+      setPassword("");
     }
-
-    if (!email.trim()) {
-      newErrors.email = "Email is required";
-    }
-
-    if (!password.trim()) {
-      newErrors.password = "Password is required";
-    }
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-
-    setErrors({});
-
-    try {
-      const response = await fetch(
-        "https://jsonplaceholder.typicode.com/users",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, email, password }),
-        }
-      );
+  } catch (error) {
+    console.log("Error submitting form");
+  }
+};
 
       if (response.ok) {
         setMessage("Registration successful!");
