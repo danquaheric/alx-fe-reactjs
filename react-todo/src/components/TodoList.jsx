@@ -1,25 +1,30 @@
-import { useState } from 'react';
-import AddTodoForm from './AddTodoForm';
+import { useState } from "react";
 
 const TodoList = () => {
   const [todos, setTodos] = useState([
-    { id: 1, text: 'Learn React', completed: false },
-    { id: 2, text: 'Write Tests', completed: false },
-    { id: 3, text: 'Build Projects', completed: false },
+    { id: 1, text: "Learn React", completed: false },
+    { id: 2, text: "Write Tests", completed: false }
   ]);
 
-  const addTodo = (text) => {
+  const [input, setInput] = useState("");
+
+  const addTodo = (e) => {
+    e.preventDefault();
+    if (!input) return;
+
     const newTodo = {
       id: Date.now(),
-      text,
-      completed: false,
+      text: input,
+      completed: false
     };
+
     setTodos([...todos, newTodo]);
+    setInput("");
   };
 
   const toggleTodo = (id) => {
     setTodos(
-      todos.map((todo) =>
+      todos.map(todo =>
         todo.id === id
           ? { ...todo, completed: !todo.completed }
           : todo
@@ -28,30 +33,35 @@ const TodoList = () => {
   };
 
   const deleteTodo = (id) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+    setTodos(todos.filter(todo => todo.id !== id));
   };
 
   return (
     <div>
-      <h2>Todo List</h2>
+      <h1>Todo List</h1>
 
-      <AddTodoForm addTodo={addTodo} />
+      <form onSubmit={addTodo}>
+        <input
+          placeholder="Add todo"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+        />
+        <button type="submit">Add</button>
+      </form>
 
       <ul>
-        {todos.map((todo) => (
+        {todos.map(todo => (
           <li key={todo.id}>
             <span
               onClick={() => toggleTodo(todo.id)}
               style={{
                 textDecoration: todo.completed
-                  ? 'line-through'
-                  : 'none',
-                cursor: 'pointer',
+                  ? "line-through"
+                  : "none"
               }}
             >
               {todo.text}
             </span>
-
             <button onClick={() => deleteTodo(todo.id)}>
               Delete
             </button>
